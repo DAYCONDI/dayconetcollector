@@ -1,0 +1,30 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# PyInstaller
+build/
+dist/
+*.spec
+
+# Environment / secrets
+.env
+*.env
+!.env.example
+
+# Logs
+logs/
+*.log
+
+# AI bridge
+bridge/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+desktop.ini
