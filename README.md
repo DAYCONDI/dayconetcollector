@@ -38,6 +38,20 @@ The collector service runs in the background, independent of the dashboard. It c
 
 6. Optional cleanup: after verifying that scripts\run_smoke_test.bat passes, you may delete collector\.venv and dashboard\.venv; they are no longer used.
 
+## Running as standalone executables
+
+After building, the project produces two standalone executables. Python is not required to run them.
+
+- **Collector (background service)**: collector\dist\DaycoNetCollector.exe
+  This is the engine that captures per-process network usage. It is normally installed as a Windows Service (see "## Quick Start" step 4). It runs silently in the background and writes to PostgreSQL.
+
+- **Dashboard (GUI)**: dashboard\dist\DaycoNetDashboard.exe
+  Double-click this file to view reports, charts, and export PDFs. You can create a desktop shortcut to it. The dashboard only reads from PostgreSQL; the collector must be running or have run at least once for the dashboard to show data.
+
+To build the executables:
+    scripts\build_exe.bat
+    scripts\build_dashboard_exe.bat
+
 ## If something breaks
 
 **[FAIL] env ... not set** - Run scripts\setup_db.bat (or scripts\set_env_example.bat for env vars only), then close and reopen the terminal.
@@ -61,8 +75,8 @@ Both variables are set by scripts\setup_db.bat during database setup. Use script
 
 ```
 dayconet/
-  collector/        service.py, db.py, config.py
-  dashboard/        main.py, queries.py, chart.py, pdf_export.py
+  collector/        service.py, db.py, config.py, DaycoNetCollector.spec, dist/
+  dashboard/        main.py, queries.py, chart.py, pdf_export.py, DaycoNetDashboard.spec, dist/
   db/               schema.sql
   scripts/          create_db.sql, setup_db.bat, setup_venv.bat, build_exe.bat,
                     install_service.bat, uninstall_service.bat,

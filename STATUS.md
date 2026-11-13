@@ -4,7 +4,7 @@ Updated by the agent after every task.
 
 ## Current
 
-- task 26 complete
+- project complete and pushed to GitHub
 
 ## Completed
 - scaffold initialization (task 1) - done
@@ -52,9 +52,13 @@ Updated by the agent after every task.
 - collector/DaycoNetCollector.spec created - done
 - scripts/build_exe.bat now uses spec file - done
 - scripts/install_service.bat hardened - done
+- dashboard/DaycoNetDashboard.spec created - done
+- scripts/build_dashboard_exe.bat created - done
+- .gitignore updated to track custom .spec files - done
+- Final documentation update and GitHub push - done
 ## Next
 
-- operator closes any running collector, runs scripts\build_exe.bat, runs scripts\install_service.bat as Administrator, verifies service is Running, and checks dashboard shows new data
+- none - project is feature-complete
 
 ## Blocked
 - none

@@ -8,6 +8,8 @@ __pycache__/
 build/
 dist/
 *.spec
+!collector/DaycoNetCollector.spec
+!dashboard/DaycoNetDashboard.spec
 
 # Environment / secrets
 .env
