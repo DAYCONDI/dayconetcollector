@@ -17,4 +17,4 @@ DB_DSN = os.environ.get("DAYCONET_DSN")  # may be None; DB layer validates
 SAMPLE_INTERVAL_SEC = 5
 AGGREGATE_INTERVAL_SEC = 60
 RAW_RETENTION_DAYS = 30
-LOG_LEVEL = "INFO"
+LOG_LEVEL = os.environ.get("DAYCONET_LOG_LEVEL", "INFO").upper()

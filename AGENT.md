@@ -1,4 +1,4 @@
-# AGENT.md — Rules for the Coding Agent
+# AGENT.md - Rules for the Coding Agent
 
 These rules are mandatory for every task in this repository.
 
@@ -18,7 +18,15 @@ These rules are mandatory for every task in this repository.
 
 ## After Every Task
 - Update STATUS.md: current task, what was completed, what is next.
-- If any error or mistake occurred, append a new numbered lesson to LESSONS.md using the format already present there.
+- Any error, failed command, wrong assumption, or non-obvious correction - even one you recovered from within the same task - MUST be recorded as a new numbered lesson in LESSONS.md before the task is finished.
+- "I recovered so no lesson is needed" is NOT an acceptable reason to skip recording.
+- "No mistakes" in your final report is only valid if no command failed, no assumption was wrong, and no correction was made during the entire task.
+
+## Conditionals in Prompts
+- When a task says "if the previous report ...", "if the last task ...", "in the prior turn ...", or similar, evaluate the condition against the PREVIOUS agent report, not the report you are currently writing.
+- If a conditional is TRUE, its required action MUST be performed even if the current task otherwise succeeded.
+- Do not reinterpret "previous" as "current". If unclear, treat it as "previous".
+- If you decide a conditional is FALSE, state in your report: "Conditional X evaluated FALSE because Y." If you cannot state a concrete reason, the conditional is TRUE.
 
 ## Code Style (Python)
 - Python 3.10+.
@@ -31,6 +39,25 @@ These rules are mandatory for every task in this repository.
 
 ## File Encoding
 - All text files: UTF-8, LF line endings (except .bat/.ps1 which use CRLF as declared in .gitattributes).
+
+## ASCII-only for meta files
+- The files AGENT.md, LESSONS.md, and STATUS.md must contain ASCII characters only.
+- No em-dashes, en-dashes, smart quotes, arrows, or any byte greater than 127.
+- Use plain ASCII substitutes: "-" instead of em-dash, "->" instead of arrow, straight quotes instead of smart quotes.
+- Verify by reading all bytes and asserting every byte is in 0x09, 0x0A, 0x0D, or 0x20-0x7E.
+- This rule exists because PowerShell 5.1 defaults to CP1252 output, and non-ASCII text in these three files produces mojibake in reports and logs.
+- Report bodies (the text the agent sends back) are also subject to ASCII-only. Use "-" for dashes and "->" for arrows in report text too, not just in files.
+
+
+## Shell Commands (Windows 10 default shell)
+- All shell commands must be compatible with Windows PowerShell 5.1, the default shell on Windows 10.
+- Do NOT use Unix-only operators or tools: `&&`, `||`, `wc`, `grep`, `sed`, `awk`, `head`, `tail`, `find`, `xargs`, `rm -rf`, or backtick chaining.
+- Use PowerShell-native equivalents instead:
+  - Command chaining: `;` or `-and` / `-or`.
+  - Line count: `(Get-Content -Path <file>).Count` or `Get-Content <file> | Measure-Object -Line`.
+  - Text search: `Select-String -Pattern <regex> -Path <file>`.
+  - Conditional on exit code: `if ($?) { ... }`.
+- If unsure whether a command is PowerShell-5.1-compatible, use the simplest form that works in both PowerShell 5.1 and PowerShell 7+.
 
 ## Forbidden
 - Do not install dependencies unless the task explicitly says to.

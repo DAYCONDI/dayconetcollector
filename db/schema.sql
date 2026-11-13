@@ -1,7 +1,7 @@
--- Traffic collection schema for the Dayconet collector.
--- Idempotent: every CREATE uses IF NOT EXISTS. No grants, users, or DROPs.
+-- DaycoNet schema. Run as postgres after create_db.sql:
+--   psql -U postgres -d dayconet -f db\schema.sql
+-- Idempotent: safe to run more than once.
 
--- Raw per-packet/process traffic samples.
 CREATE TABLE IF NOT EXISTS traffic_raw (
     id           BIGSERIAL PRIMARY KEY,
     captured_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -12,7 +12,12 @@ CREATE TABLE IF NOT EXISTS traffic_raw (
     bytes_recv   BIGINT NOT NULL
 );
 
--- Hourly aggregated traffic per process.
+CREATE INDEX IF NOT EXISTS idx_traffic_raw_time
+    ON traffic_raw (captured_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_traffic_raw_proc_time
+    ON traffic_raw (process_name, captured_at DESC);
+
 CREATE TABLE IF NOT EXISTS traffic_hourly (
     bucket_start TIMESTAMPTZ NOT NULL,
     process_name TEXT NOT NULL,
@@ -21,7 +26,10 @@ CREATE TABLE IF NOT EXISTS traffic_hourly (
     PRIMARY KEY (bucket_start, process_name)
 );
 
--- Indexes.
-CREATE INDEX IF NOT EXISTS idx_traffic_raw_time ON traffic_raw (captured_at DESC);
-CREATE INDEX IF NOT EXISTS idx_traffic_raw_proc_time ON traffic_raw (process_name, captured_at DESC);
-CREATE INDEX IF NOT EXISTS idx_traffic_hourly_time ON traffic_hourly (bucket_start DESC);
+CREATE INDEX IF NOT EXISTS idx_traffic_hourly_time
+    ON traffic_hourly (bucket_start DESC);
+
+-- Grants. Writer needs DELETE for pruning old rows; UPDATE for ON CONFLICT DO UPDATE.
+GRANT SELECT, INSERT, UPDATE, DELETE ON traffic_raw, traffic_hourly TO dayconet_writer;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO dayconet_writer;
+GRANT SELECT ON traffic_raw, traffic_hourly TO dayconet_reader;
