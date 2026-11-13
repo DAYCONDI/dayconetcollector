@@ -4,7 +4,7 @@ Updated by the agent after every task.
 
 ## Current
 
-- project complete and pushed to GitHub
+- task 32 complete
 
 ## Completed
 - scaffold initialization (task 1) - done
@@ -56,6 +56,7 @@ Updated by the agent after every task.
 - scripts/build_dashboard_exe.bat created - done
 - .gitignore updated to track custom .spec files - done
 - Final documentation update and GitHub push - done
+- Removed .kilo/ directory from git tracking and added to .gitignore - done
 ## Next
 
 - none - project is feature-complete

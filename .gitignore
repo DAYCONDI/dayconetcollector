@@ -26,6 +26,7 @@ bridge/
 # IDE
 .vscode/
 .idea/
+.kilo/
 
 # OS
 Thumbs.db
